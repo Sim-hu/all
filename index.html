@@ -142,6 +142,14 @@
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+        .diary-entry {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -157,286 +165,662 @@
         <button onclick="showPage('freecrystalPage')">フリークリスタ計算</button>
         <button onclick="showPage('critsPage')">c率計算機</button>
         <button onclick="showPage('makePage')">マケ計算機</button>
+        <button onclick="showPage('diaryPage')">日記</button>
+        <button onclick="showPage('expPage')">必要経験値</button>
     </div>
 
+    <div id="content">
+        <!-- 他のHTMLファイルの内容がここに挿入されます -->
     <!-- CD計算機 -->
-    <div id="cdPage" class="page">
-        <h1>CD計算機</h1>
-        <div class="calculator">
-            <form>
-                <label for="basestr">基礎STR:</label>
-                <input type="number" id="basestr" placeholder="0" value="0" required><br>
+<div id="cdPage" class="page">
+    <h1>CD計算機</h1>
+    <div class="calculator">
+        <form>
+            <label for="basestr">基礎STR:</label>
+            <input type="number" id="basestr" placeholder="0" value="0" required><br>
+            <label for="strp">STR%:</label>
+            <input type="number" id="strp" placeholder="0" value="0" required><br>
+            <label for="addstr">STR+:</label>
+            <input type="number" id="addstr" placeholder="0" value="0" required><br>
+            <label for="baseagi">基礎AGI:</label>
+            <input type="number" id="baseagi" placeholder="0" value="0" required><br>
+            <label for="agip">AGI%:</label>
+            <input type="number" id="agip" placeholder="0" value="0" required><br>
+            <label for="addagi">AGI+:</label>
+            <input type="number" id="addagi" placeholder="0" value="0" required><br>
+            <label for="addcd">cd固定値:</label>
+            <input type="number" id="addcd" placeholder="0" value="0" required><br>
+            <label for="cdp">cd%:</label>
+            <input type="number" id="cdp" placeholder="0" value="0" required><br>
+            <label for="cupslv">クリティカルupslv</label>
+            <select id="cupslv">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select><br>
+            <label for="kisekislv">神速の軌跡slv:</label>
+            <select id="kisekislv">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select><br>
+            <button type="button" onclick="calculateCD()">計算</button>
+        </form>
+        <div id="cdResult" class="result"></div>
+    </div>
+</div>
 
-                <label for="strp">STR%:</label>
-                <input type="number" id="strp" placeholder="0" value="0" required><br>
+<!-- フリークリスタ計算 -->
+<div id="freecrystalPage" class="page">
+    <h1>フリークリスタ計算</h1>
+    <div class="calculator">
+        <h2>1. タダになる個数から売値を計算</h2>
+        <div>
+            <label for="n1">買った単価 (万円):</label>
+            <input type="number" id="n1" step="0.1" min="0">
+        </div>
+        <div>
+            <label for="m1">購入個数:</label>
+            <input type="number" id="m1" min="0">
+        </div>
+        <div>
+            <label for="t1">タダにしたい個数:</label>
+            <input type="number" id="t1" min="0">
+        </div>
+        <button onclick="calculateStock1()">計算</button>
+        <div id="stockResult1" class="result"></div>
+    </div>
+    <div class="calculator">
+        <h2>2. 売却個数から残りのタダになる個数を計算</h2>
+        <div>
+            <label for="n2">買った単価 (万円):</label>
+            <input type="number" id="n2" step="0.1" min="0">
+        </div>
+        <div>
+            <label for="m2">購入個数:</label>
+            <input type="number" id="m2" min="0">
+        </div>
+        <div>
+            <label for="k2">売却する個数:</label>
+            <input type="number" id="k2" min="0">
+        </div>
+        <button onclick="calculateStock2()">計算</button>
+        <div id="stockResult2" class="result"></div>
+    </div>
+</div>
 
-                <label for="addstr">STR+:</label>
-                <input type="number" id="addstr" placeholder="0" value="0" required><br>
+<!-- c率計算機 -->
+<div id="critsPage" class="page">
+    <h1>c率計算機</h1>
+    <div class="calculator">
+        <form>
+            <label for="crt">ステcrt:</label>
+            <input type="number" id="crt" placeholder="0" value="0" required><br>
+            <label for="crp">c%:</label>
+            <input type="number" id="crp" placeholder="0" value="0" required><br>
+            <label for="addcr">c固定値:</label>
+            <input type="number" id="addcr" placeholder="0" value="0" required><br>
+            <label for="addcra">c固定値:</label>
+            <input type="number" id="addcra" placeholder="0" value="0" required><br>
+            <label for="addcrb">c固定値:</label>
+            <input type="number" id="addcrb" placeholder="0" value="0" required><br>
+            <label for="addcrc">c固定値:</label>
+            <input type="number" id="addcrc" placeholder="0" value="0" required><br>
+            <label for="addcrd">c固定値:</label>
+            <input type="number" id="addcrd" placeholder="0" value="0" required><br>
+            <button type="button" onclick="calculateCrits()">計算</button>
+        </form>
+        <div id="critsResult" class="result"></div>
+    </div>
+</div>
 
-                <label for="baseagi">基礎AGI:</label>
-                <input type="number" id="baseagi" placeholder="0" value="0" required><br>
-
-                <label for="agip">AGI%:</label>
-                <input type="number" id="agip" placeholder="0" value="0" required><br>
-
-                <label for="addagi">AGI+:</label>
-                <input type="number" id="addagi" placeholder="0" value="0" required><br>
-
-                <label for="addcd">cd固定値:</label>
-                <input type="number" id="addcd" placeholder="0" value="0" required><br>
-
-                <label for="cdp">cd%:</label>
-                <input type="number" id="cdp" placeholder="0" value="0" required><br>
-
-                <label for="cupslv">クリティカルupslv</label>
-                <select id="cupslv">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select><br>
-
-                <label for="kisekislv">神速の軌跡slv:</label>
-                <select id="kisekislv">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select><br>
-
-                <button type="button" onclick="calculateCD()">計算</button>
-            </form>
-            <div id="cdResult" class="result"></div>
+<!-- マケ計算機 -->
+<div id="makePage" class="page">
+    <h1>マケ計算機</h1>
+    <div class="calculator">
+        <h2>表示値段計算機</h2>
+        <label for="s">設定値段:</label>
+        <input type="number" id="s" name="s"><br>
+        <label for="m">マケ手数料 (%):</label>
+        <input type="number" id="m" name="m" step="0.01"><br>
+        <button onclick="calculateDisplay()">計算</button>
+        <div id="displayResult" class="result"></div>
+    </div>
+    <div class="calculator">
+        <h2>設定値段計算機</h2>
+        <label for="hyouki">表記値段:</label>
+        <input type="number" id="hyouki" name="hyouki"><br>
+        <label for="tesuu">マケ手数料 (%):</label>
+        <input type="number" id="tesuu" name="tesuu" step="0.01"><br>
+        <button onclick="calculateSetting()">計算</button>
+        <div id="settingResult" class="result"></div>
+    </div>
+    <p>上がマケに表記される値段を計算出来る<br>下がマケにこの値段で出したいを出せる</p>
+</div>
+<!-- 日記 -->
+<div id="diaryPage" class="page">
+    <h1>冒険者の日記シミュレータ</h1>
+    <div id="diaryEntries">
+        <div class="diary-entry">
+            <h3>日記 1</h3>
+            <p>
+                現在レベル: <input type="number" class="currentLevel" min="1" value="250">
+                現在経験値%: <input type="number" class="currentExpPercentage" min="0" max="100" value="0" step="0.01">
+            </p>
+            <p>
+                目標レベル: <input type="number" class="targetLevel" min="1" value="290">
+                目標レベル経験値%: <input type="number" class="targetExpPercentage" min="0" max="100" value="0" step="0.01">
+            </p>
+            <p>
+                ストーリー開始:
+                <select class="storyStart"></select>
+            </p>
+            <p>
+                ストーリー終了:
+                <select class="storyEnd"></select>
+            </p>
+            <p class="skip77Option hidden">
+                第77話をスキップする: <input type="checkbox" class="skip77" checked>
+            </p>
+            <button onclick="calculateDiary(this)">計算する</button>
+            <div class="diaryResult result"></div>
         </div>
     </div>
-
-    <!-- フリークリスタ計算 -->
-    <div id="freecrystalPage" class="page">
-        <h1>フリークリスタ計算</h1>
-        <div class="calculator">
-            <h2>1. タダになる個数から売値を計算</h2>
-            <div>
-                <label for="n1">買った単価 (万円):</label>
-                <input type="number" id="n1" step="0.1" min="0">
-            </div>
-            <div>
-                <label for="m1">購入個数:</label>
-                <input type="number" id="m1" min="0">
-            </div>
-            <div>
-                <label for="t1">タダにしたい個数:</label>
-                <input type="number" id="t1" min="0">
-            </div>
-            <button onclick="calculateStock1()">計算</button>
-            <div id="stockResult1" class="result"></div>
-        </div>
-        <div class="calculator">
-            <h2>2. 売却個数から残りのタダになる個数を計算</h2>
-            <div>
-                <label for="n2">買った単価 (万円):</label>
-                <input type="number" id="n2" step="0.1" min="0">
-            </div>
-            <div>
-                <label for="m2">購入個数:</label>
-                <input type="number" id="m2" min="0">
-            </div>
-            <div>
-                <label for="k2">売却する個数:</label>
-                <input type="number" id="k2" min="0">
-            </div>
-            <button onclick="calculateStock2()">計算</button>
-            <div id="stockResult2" class="result"></div>
-        </div>
+    <button onclick="addDiaryEntry()">日記を追加</button>
+</div>
+<!-- 必要経験値 -->
+<div id="expPage" class="page">
+    <h1>累計必要経験値計算</h1>
+    <div class="calculator">
+        <p>
+            現在のレベル (x): <input type="number" id="currentLevel" min="1" value="1">
+            現在の経験値 (%): <input type="number" id="currentExp" min="0" max="100" value="0" step="0.01">
+        </p>
+        <p>
+            <input type="radio" id="levelIncreaseRadio" name="calculationType" value="levelIncrease" checked>
+            <label for="levelIncreaseRadio">レベル数指定</label>
+            <input type="number" id="levelIncrease" min="0" value="0">
+        </p>
+        <p>
+            <input type="radio" id="targetLevelRadio" name="calculationType" value="targetLevel">
+            <label for="targetLevelRadio">目標レベル指定</label>
+            <input type="number" id="targetLevel" min="1" value="1" disabled>
+        </p>
+        <button onclick="calculateExp()">計算する</button>
+        <p class="result" id="resultRaw"></p>
+        <p class="result" id="resultFormatted"></p>
     </div>
+</div>
 
-    <!-- c率計算機 -->
-    <div id="critsPage" class="page">
-        <h1>c率計算機</h1>
-        <div class="calculator">
-            <form>
-                <label for="crt">ステcrt:</label>
-                <input type="number" id="crt" placeholder="0" value="0" required><br>
-                <label for="crp">c%:</label>
-                <input type="number" id="crp" placeholder="0" value="0" required><br>
-                <label for="addcr">c固定値:</label>
-                <input type="number" id="addcr" placeholder="0" value="0" required><br>
-                <label for="addcra">c固定値:</label>
-                <input type="number" id="addcra" placeholder="0" value="0" required><br>
-                <label for="addcrb">c固定値:</label>
-                <input type="number" id="addcrb" placeholder="0" value="0" required><br>
-                <label for="addcrc">c固定値:</label>
-                <input type="number" id="addcrc" placeholder="0" value="0" required><br>
-                <label for="addcrd">c固定値:</label>
-                <input type="number" id="addcrd" placeholder="0" value="0" required><br>
-                <button type="button" onclick="calculateCrits()">計算</button>
-            </form>
-            <div id="critsResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- マケ計算機 -->
-    <div id="makePage" class="page">
-        <h1>マケ計算機</h1>
-        <div class="calculator">
-            <h2>表示値段計算機</h2>
-            <label for="s">設定値段:</label>
-            <input type="number" id="s" name="s"><br>
-            <label for="m">マケ手数料 (%):</label>
-            <input type="number" id="m" name="m" step="0.01"><br>
-            <button onclick="calculateDisplay()">計算</button>
-            <div id="displayResult" class="result"></div>
-        </div>
-        <div class="calculator">
-            <h2>設定値段計算機</h2>
-            <label for="hyouki">表記値段:</label>
-            <input type="number" id="hyouki" name="hyouki"><br>
-            <label for="tesuu">マケ手数料 (%):</label>
-            <input type="number" id="tesuu" name="tesuu" step="0.01"><br>
-            <button onclick="calculateSetting()">計算</button>
-            <div id="settingResult" class="result"></div>
-        </div>
-        <p>上がマケに表記される値段を計算出来る<br>下がマケにこの値段で出したいを出せる</p>
     </div>
 
     <script>
-        function showPage(pageId) {
-            const pages = document.getElementsByClassName('page');
-            for (let i = 0; i < pages.length; i++) {
-                pages[i].classList.remove('active');
-            }
-            document.getElementById(pageId).classList.add('active');
+        const stories = [
+  { chapter: 1, episode: 1, title: "初めての街、初めての人々", exp: 30 },
+  { chapter: 1, episode: 2, title: "ストレイエの兄妹", exp: 80 },
+  { chapter: 1, episode: 3, title: "ゴーレムの暴走", exp: 730 },
+  { chapter: 1, episode: 4, title: "知の女神", exp: 2060 },
+  { chapter: 1, episode: 5, title: "竜の湧く穴", exp: 4700 },
+  { chapter: 1, episode: 6, title: "滅びの寺院", exp: 9330 },
+  { chapter: 1, episode: 7, title: "最初の魔石", exp: 16700 },
+  { chapter: 1, episode: 8, title: "滅瘴香", exp: 27900 },
+  { chapter: 1, episode: 9, title: "竜と黒い結晶", exp: 43000 },
+  { chapter: 2, episode: 10, title: "ついて来た商人娘", exp: 64000 },
+  { chapter: 2, episode: 11, title: "ホーリージェムを求めて", exp: 92000 },
+  { chapter: 2, episode: 12, title: "謎！？黒騎士", exp: 118200 },
+  { chapter: 2, episode: 13, title: "新月の鬼殿の試練", exp: 149000 },
+  { chapter: 2, episode: 14, title: "月の魔導士", exp: 172000 },
+  { chapter: 2, episode: 15, title: "敬うもの、憎むもの", exp: 227000 },
+  { chapter: 2, episode: 16, title: "魔導士の洞窟", exp: 240000 },
+  { chapter: 2, episode: 17, title: "星の魔導士", exp: 255000 },
+  { chapter: 3, episode: 18, title: "最強の難敵？？", exp: 270000 },
+  { chapter: 3, episode: 19, title: "いにしえの女帝", exp: 284000 },
+  { chapter: 3, episode: 20, title: "襲撃犯の正体", exp: 319000 },
+  { chapter: 3, episode: 21, title: "砦の運命", exp: 335000 },
+  { chapter: 3, episode: 22, title: "消えた街の記憶", exp: 398000 },
+  { chapter: 3, episode: 23, title: "奪われたソーサルジェム", exp: 417000 },
+  { chapter: 3, episode: 24, title: "竜と暮らす人々", exp: 462300 },
+  { chapter: 3, episode: 25, title: "異界からの異形", exp: 540000 },
+  { chapter: 4, episode: 26, title: "魔法を使うディール", exp: 562000 },
+  { chapter: 4, episode: 27, title: "再興のための流転", exp: 585000 },
+  { chapter: 4, episode: 28, title: "アカークの聖宝石", exp: 710000 },
+  { chapter: 4, episode: 29, title: "ダルカンの王", exp: 740000 },
+  { chapter: 4, episode: 30, title: "処理場でうごめくもの", exp: 803000 },
+  { chapter: 4, episode: 31, title: "ニセ黒騎士を追え！", exp: 913000 },
+  { chapter: 4, episode: 32, title: "テクニスタの胎動", exp: 1000000 },
+  { chapter: 4, episode: 33, title: "舞い降りる死の羽", exp: 1100000 },
+  { chapter: 5, episode: 34, title: "未知の闇の中で", exp: 1150000 },
+  { chapter: 5, episode: 35, title: "呪符のありか", exp: 1310000 },
+  { chapter: 5, episode: 36, title: "干上がる闇の鏡", exp: 1370000 },
+  { chapter: 5, episode: 37, title: "昇華の園の激闘", exp: 1550000 },
+  { chapter: 5, episode: 38, title: "闇に射す光", exp: 1750000 },
+  { chapter: 5, episode: 39, title: "館に巣食う者", exp: 1970000 },
+  { chapter: 5, episode: 40, title: "闇の城", exp: 2210000 },
+  { chapter: 5, episode: 41, title: "生の世界へ", exp: 2220000 },
+  { chapter: 6, episode: 42, title: "デミマキナ", exp: 2600000 },
+  { chapter: 6, episode: 43, title: "パクスの街", exp: 2700000 },
+  { chapter: 6, episode: 44, title: "機械仕掛けの心", exp: 2800000 },
+  { chapter: 6, episode: 45, title: "リュアークの黒騎士", exp: 2820000 },
+  { chapter: 6, episode: 46, title: "謎の遺物", exp: 3030000 },
+  { chapter: 6, episode: 47, title: "遺物の正体", exp: 3099000 },
+  { chapter: 6, episode: 48, title: "裏切りの代償", exp: 3320000 },
+  { chapter: 6, episode: 49, title: "生命冒とく工場", exp: 3640000 },
+  { chapter: 6, episode: 50, title: "黒騎士の謎", exp: 4020000 },
+  { chapter: 7, episode: 51, title: "怪物の森", exp: 4730000 },
+  { chapter: 7, episode: 52, title: "パルチザンの地下都市", exp: 4820000 },
+  { chapter: 7, episode: 53, title: "リュアーク領内のエルフ", exp: 5070000 },
+  { chapter: 7, episode: 54, title: "狂気の研究所", exp: 5500000 },
+  { chapter: 7, episode: 55, title: "惨状の監獄", exp: 6000000 },
+  { chapter: 7, episode: 56, title: "ドローマ広場の惨禍", exp: 6400000 },
+  { chapter: 7, episode: 57, title: "アルティメア宮へ", exp: 6900000 },
+  { chapter: 7, episode: 58, title: "混沌する真実", exp: 7400000 },
+  { chapter: 8, episode: 59, title: "怪物の棲む坑道", exp: 8400000 },
+  { chapter: 8, episode: 60, title: "謎の人影", exp: 8500000 },
+  { chapter: 8, episode: 61, title: "ディールの新たな国", exp: 8600000 },
+  { chapter: 8, episode: 62, title: "神々の遺跡のありか", exp: 8800000 },
+  { chapter: 8, episode: 63, title: "先代の義の神", exp: 9100000 },
+  { chapter: 8, episode: 64, title: "神殿に残る玉座", exp: 9700000 },
+  { chapter: 8, episode: 65, title: "神々の所在", exp: 10400000 },
+  { chapter: 8, episode: 66, title: "種の神殿で待つ者", exp: 11100000 },
+  { chapter: 8, episode: 67, title: "氷雪の番人", exp: 11800000 },
+  { chapter: 8, episode: 68, title: "山脈の果てに", exp: 12500000 },
+  { chapter: 9, episode: 69, title: "エルデンバウムへの険道", exp: 15800000 },
+  { chapter: 9, episode: 70, title: "思わぬ罠", exp: 17100000 },
+  { chapter: 9, episode: 71, title: "進歩の遺構", exp: 18200000 },
+  { chapter: 9, episode: 72, title: "予想外の知己", exp: 19200000 },
+  { chapter: 9, episode: 73, title: "前線基地移動", exp: 20300000 },
+  { chapter: 9, episode: 74, title: "樹上の港奪還戦", exp: 21500000 },
+  { chapter: 9, episode: 75, title: "転移装置と言う遺産", exp: 22700000 },
+  { chapter: 9, episode: 76, title: "死地を求める男", exp: 23900000 },
+  { chapter: 9, episode: 77, title: "エルデンバウム奪還戦", exp: 37500000 },
+  { chapter: 9, episode: 78, title: "新たな始まり", exp: 13000000 },
+  { chapter: 10, episode: 79, title: "因縁深き地へ", exp: 26000000 },
+  { chapter: 10, episode: 80, title: "崖下の占領者", exp: 27400000 },
+  { chapter: 10, episode: 81, title: "悪夢との再会", exp: 28800000 },
+  { chapter: 10, episode: 82, title: "消えた僧の行方", exp: 30200000 },
+  { chapter: 10, episode: 83, title: "勇の女神と不法占領の民", exp: 31600000 },
+  { chapter: 10, episode: 84, title: "方舟の舵取り", exp: 33100000 },
+  { chapter: 10, episode: 85, title: "森の中の魔女", exp: 34600000 },
+  { chapter: 10, episode: 86, title: "ノヴ・ディーラの決闘", exp: 36200000 },
+  { chapter: 11, episode: 87, title: "方舟翔ぶ", exp: 37800000 },
+  { chapter: 11, episode: 88, title: "見知らぬ地で", exp: 49000000 },
+  { chapter: 11, episode: 89, title: "散歩する森", exp: 51000000 },
+  { chapter: 11, episode: 90, title: "森の人ユマーノ", exp: 53400000 },
+  { chapter: 11, episode: 91, title: "芽吹きし者", exp: 55700000 },
+  { chapter: 11, episode: 92, title: "恵みをもたらす人", exp: 58100000 },
+  { chapter: 11, episode: 93, title: "コエヌビア要塞の激闘", exp: 60500000 },
+  { chapter: 11, episode: 94, title: "煙吹く山の影", exp: 63000000 },
+  { chapter: 11, episode: 95, title: "竜人と地下の世界", exp: 65500000 },
+  { chapter: 12, episode: 96, title: "天井のある空", exp: 73400000 },
+  { chapter: 12, episode: 97, title: "相克の竜と竜人", exp: 76300000 },
+  { chapter: 12, episode: 98, title: "子連れの竜人夫婦", exp: 79300000 },
+  { chapter: 12, episode: 99, title: "竜人の要", exp: 82300000 },
+  { chapter: 12, episode: 100, title: "推進機関での激闘", exp: 85300000 },
+  { chapter: 12, episode: 101, title: "新たな技術を掴みに", exp: 44200000 },
+  { chapter: 12, episode: 102, title: "方舟改修", exp: 92700000 },
+  { chapter: 12, episode: 103, title: "竜人の諍い", exp: 96000000 },
+  { chapter: 12, episode: 104, title: "氷壁の中の繭", exp: 99300000 },
+  { chapter: 13, episode: 105, title: "水に棲む民", exp: 112600000 },
+  { chapter: 13, episode: 106, title: "水の円蓋", exp: 116500000 },
+  { chapter: 13, episode: 107, title: "水の中の都市", exp: 60200000 },
+  { chapter: 13, episode: 108, title: "廃棄区画に潜む者", exp: 125800000 },
+  { chapter: 13, episode: 109, title: "深海より来たる影", exp: 129900000 },
+  { chapter: 13, episode: 110, title: "酷薄の評議会", exp: 67000000 },
+  { chapter: 13, episode: 111, title: "祠の中に秘めしもの", exp: 139900000 },
+  { chapter: 13, episode: 112, title: "水中の一大決戦", exp: 144200000 },
+  { chapter: 14, episode: 113, title: "本土上空の危機", exp: 159100000 },
+  { chapter: 14, episode: 114, title: "ユマーノの生き残り兄妹", exp: 164000000 },
+  { chapter: 14, episode: 115, title: "かく乱される戦況", exp: 168900000 },
+  { chapter: 14, episode: 116, title: "苦い真実", exp: 173800000 }
+];
+const CHAPTER_77_INDEX = 76;
+const CHAPTER_78_INDEX = 77;
+const CHAPTER_77_EXP = 37500000;
+
+function showPage(pageId) {
+    const pages = document.getElementsByClassName('page');
+    for (let i = 0; i < pages.length; i++) {
+        pages[i].classList.remove('active');
+    }
+    document.getElementById(pageId).classList.add('active');
+}
+
+// ダークモード切り替え機能
+const darkModeSwitch = document.getElementById('darkModeSwitch');
+darkModeSwitch.addEventListener('change', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+// CD計算機関数
+function calculateCD() {
+    var basestr = parseFloat(document.getElementById('basestr').value) || 0;
+    var strp = parseFloat(document.getElementById('strp').value) || 0;
+    var addstr = parseFloat(document.getElementById('addstr').value) || 0;
+    var baseagi = parseFloat(document.getElementById('baseagi').value) || 0;
+    var agip = parseFloat(document.getElementById('agip').value) || 0;
+    var addagi = parseFloat(document.getElementById('addagi').value) || 0;
+    var cdp = parseFloat(document.getElementById('cdp').value) || 0;
+    var addcd = parseFloat(document.getElementById('addcd').value) || 0;
+    var cupslv = parseFloat(document.getElementById('cupslv').value) || 0;
+    var kisekislv = parseFloat(document.getElementById('kisekislv').value) || 0;
+
+    cdp += calculatecdupEffect(cupslv);
+    var totalagi = baseagi * (1 + agip / 100) + addagi + calculateSwiftTrajectoryEffect(kisekislv);
+    var totalstr = basestr * (1 + strp / 100) + addstr;
+    var maxResult = Math.max(totalstr / 5, (totalagi + totalstr) / 10);
+    var result = Math.floor((150 + maxResult) * (1 + cdp / 100)) + addcd;
+
+    if (result > 300) {
+        result = Math.floor((result - 300) / 2 + 300);
+    }
+    document.getElementById('cdResult').innerText = '結果: ' + result;
+}
+
+function calculatecdupEffect(level) {
+    return Math.min((level - 1), 5);
+}
+
+function calculateSwiftTrajectoryEffect(level) {
+    if (level <= 5) {
+        return level;
+    } else {
+        return 5 + (level - 5) * 2;
+    }
+}
+
+// フリークリスタ計算関数
+function calculateStock1() {
+    const n = parseFloat(document.getElementById('n1').value);
+    const m = parseInt(document.getElementById('m1').value);
+    const t = parseInt(document.getElementById('t1').value);
+
+    if (isNaN(n) || isNaN(m) || isNaN(t) || n <= 0 || m <= 0 || t < 0 || t >= m) {
+        document.getElementById('stockResult1').textContent = '正しい値を入力してください。';
+        return;
+    }
+
+    const totalCost = n * m;
+    const j = totalCost / (m - t);
+
+    document.getElementById('stockResult1').textContent = `${j.toFixed(1)}万円で売れば、${t}個がタダになります。`;
+}
+
+function calculateStock2() {
+    const n = parseFloat(document.getElementById('n2').value);
+    const m = parseInt(document.getElementById('m2').value);
+    const k = parseInt(document.getElementById('k2').value);
+
+    if (isNaN(n) || isNaN(m) || isNaN(k) || n <= 0 || m <= 0 || k <= 0 || k > m) {
+        document.getElementById('stockResult2').textContent = '正しい値を入力してください。';
+        return;
+    }
+
+    const totalCost = n * m;
+    const freeItems = m - k;
+    const r = totalCost / k;
+
+    document.getElementById('stockResult2').textContent = `${r.toFixed(1)}万円で売れば、残りの${freeItems}個がタダになります。`;
+}
+
+// c率計算関数
+function calculateCrits() {
+    var crt = parseFloat(document.getElementById('crt').value) || 0;
+    var crp = parseFloat(document.getElementById('crp').value) || 0;
+    var addcr = parseFloat(document.getElementById('addcr').value) || 0;
+    var addcra = parseFloat(document.getElementById('addcra').value) || 0;
+    var addcrb = parseFloat(document.getElementById('addcrb').value) || 0;
+    var addcrc = parseFloat(document.getElementById('addcrc').value) || 0;
+    var addcrd = parseFloat(document.getElementById('addcrd').value) || 0;
+
+    var result = Math.floor((25 + crt / 3.4) * (1 + crp / 100)) + addcr + addcra + addcrb + addcrc + addcrd;
+    document.getElementById('critsResult').innerText = '結果: ' + result.toFixed(2);
+}
+
+// マケ計算機関数
+function calculateDisplay() {
+    let s = parseFloat(document.getElementById('s').value);
+    let m = parseFloat(document.getElementById('m').value);
+    if (isNaN(s) || isNaN(m)) {
+        alert('有効な数値を入力してください。');
+        return;
+    }
+    let result = s * (1 + m/100);
+    document.getElementById('displayResult').textContent = `マケ表記値段: ${result.toFixed(2)}`;
+}
+
+function calculateSetting() {
+    let hyouki = parseFloat(document.getElementById('hyouki').value);
+    let tesuu = parseFloat(document.getElementById('tesuu').value);
+    if (isNaN(hyouki) || isNaN(tesuu)) {
+        alert('有効な数値を入力してください。');
+        return;
+    }
+    let result = hyouki / (1 + tesuu/100);
+    document.getElementById('settingResult').textContent = `設定値段: ${result.toFixed(2)}`;
+}
+
+// 日記関連の関数
+function calculateRequiredExp(level) {
+    return Math.floor(Math.pow(level, 4) / 40) + 2 * level;
+}
+
+function calculateTotalExpToLevel(startLevel, startExpPercentage, endLevel, endExpPercentage) {
+    let total = 0;
+    for (let i = startLevel; i < endLevel; i++) {
+        total += calculateRequiredExp(i);
+    }
+    total -= calculateRequiredExp(startLevel) * (startExpPercentage / 100);
+    total += calculateRequiredExp(endLevel) * (endExpPercentage / 100);
+    return total;
+}
+
+function calculateLevelAndPercentage(baseLevel, baseExpPercentage, addedExp) {
+    let totalExp = calculateTotalExpToLevel(1, 0, baseLevel, baseExpPercentage) + addedExp;
+    let level = 1;
+    while (calculateTotalExpToLevel(1, 0, level + 1, 0) <= totalExp) {
+        level++;
+    }
+    const currentLevelExp = calculateTotalExpToLevel(1, 0, level, 0);
+    const nextLevelExp = calculateTotalExpToLevel(1, 0, level + 1, 0);
+    const expPercentage = ((totalExp - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
+    return { level, expPercentage };
+}
+
+function formatNumber(num) {
+    const billions = Math.floor(num / 100000000);
+    const millions = Math.floor((num % 100000000) / 10000);
+    const remainder = num % 10000;
+    let formattedNumber = '';
+    if (billions > 0) {
+        formattedNumber += billions + '億';
+    }
+    if (millions > 0) {
+        formattedNumber += millions + '万';
+    }
+    if (remainder > 0) {
+        formattedNumber += remainder;
+    }
+    return formattedNumber || '0';
+}
+
+function calculateDiary(button) {
+    const diaryEntry = button.closest('.diary-entry');
+    const currentLevel = parseInt(diaryEntry.querySelector('.currentLevel').value);
+    const currentExpPercentage = parseFloat(diaryEntry.querySelector('.currentExpPercentage').value);
+    const targetLevel = parseInt(diaryEntry.querySelector('.targetLevel').value);
+    const targetExpPercentage = parseFloat(diaryEntry.querySelector('.targetExpPercentage').value);
+    const storyStart = parseInt(diaryEntry.querySelector('.storyStart').value);
+    const storyEnd = parseInt(diaryEntry.querySelector('.storyEnd').value);
+    const skip77 = diaryEntry.querySelector('.skip77').checked;
+
+    const requiredExp = calculateTotalExpToLevel(currentLevel, currentExpPercentage, targetLevel, targetExpPercentage);
+
+    let storyExp = 0;
+    for (let i = storyStart; i <= storyEnd; i++) {
+        if (i !== CHAPTER_77_INDEX || (i === CHAPTER_77_INDEX && !skip77)) {
+            storyExp += stories[i].exp;
         }
+    }
 
-        // ダークモード切り替え機能
-        const darkModeSwitch = document.getElementById('darkModeSwitch');
-        darkModeSwitch.addEventListener('change', () => {
-            document.body.classList.toggle('dark-mode');
-        });
+    const newLevelInfo = calculateLevelAndPercentage(currentLevel, currentExpPercentage, storyExp);
 
-        // CD計算機関数
-        function calculateCD() {
-            var basestr = parseFloat(document.getElementById('basestr').value) || 0;
-            var strp = parseFloat(document.getElementById('strp').value) || 0;
-            var addstr = parseFloat(document.getElementById('addstr').value) || 0;
-            var baseagi = parseFloat(document.getElementById('baseagi').value) || 0;
-            var agip = parseFloat(document.getElementById('agip').value) || 0;
-            var addagi = parseFloat(document.getElementById('addagi').value) || 0;
-            var cdp = parseFloat(document.getElementById('cdp').value) || 0;
-            var addcd = parseFloat(document.getElementById('addcd').value) || 0;
-            var cupslv = parseFloat(document.getElementById('cupslv').value) || 0;
-            var kisekislv = parseFloat(document.getElementById('kisekislv').value) || 0;
+    let resultHTML = `
+        <p>目標レベルに必要な経験値: ${formatNumber(Math.round(requiredExp))}</p>
+        <p>ストーリー経験値: ${formatNumber(Math.round(storyExp))} (${Math.round(storyExp / requiredExp * 100)}%)</p>
+        <p>完遂後レベル: ${newLevelInfo.level} (${newLevelInfo.expPercentage.toFixed(2)}%)</p>
+    `;
 
-            cdp += calculatecdupEffect(cupslv);
-            var totalagi = baseagi * (1 + agip / 100) + addagi + calculateSwiftTrajectoryEffect(kisekislv);
-            var totalstr = basestr * (1 + strp / 100) + addstr;
-            var maxResult = Math.max(totalstr / 5, (totalagi + totalstr) / 10);
-            var result = Math.floor((150 + maxResult) * (1 + cdp / 100)) + addcd;
+    if (storyExp >= requiredExp) {
+        resultHTML += `<p>目標達成！ 余剰経験値: ${formatNumber(Math.round(storyExp - requiredExp))}</p>`;
+    } else {
+        resultHTML += `<p>目標未達成。あと${formatNumber(Math.round(requiredExp - storyExp))}の経験値が必要です。</p>`;
+    }
 
-            if (result > 300) {
-                result = Math.floor((result - 300) / 2 + 300);
-            }
-            document.getElementById('cdResult').innerText = '結果: ' + result;
+    diaryEntry.querySelector('.diaryResult').innerHTML = resultHTML;
+
+    // 次の日記エントリーの初期値を設定
+    const nextDiaryEntry = diaryEntry.nextElementSibling;
+    if (nextDiaryEntry && nextDiaryEntry.classList.contains('diary-entry')) {
+        nextDiaryEntry.querySelector('.currentLevel').value = newLevelInfo.level;
+        nextDiaryEntry.querySelector('.currentExpPercentage').value = newLevelInfo.expPercentage.toFixed(2);
+    }
+
+    return newLevelInfo;
+}
+
+function addDiaryEntry() {
+    const diaryEntries = document.getElementById('diaryEntries');
+    const newEntry = diaryEntries.children[0].cloneNode(true);
+    newEntry.querySelector('h3').textContent = `日記 ${diaryEntries.children.length + 1}`;
+    
+    // 前の日記エントリーの完遂後レベルと経験値を取得
+    const prevEntry = diaryEntries.children[diaryEntries.children.length - 1];
+    const prevLevelInfo = calculateDiary(prevEntry.querySelector('button'));
+    
+    // 新しい日記エントリーの初期値を設定
+    newEntry.querySelector('.currentLevel').value = prevLevelInfo.level;
+    newEntry.querySelector('.currentExpPercentage').value = prevLevelInfo.expPercentage.toFixed(2);
+    
+    const storyStartSelect = newEntry.querySelector('.storyStart');
+    const storyEndSelect = newEntry.querySelector('.storyEnd');
+    
+    populateStoryOptions(storyStartSelect);
+    populateStoryOptions(storyEndSelect);
+    
+    storyStartSelect.value = CHAPTER_78_INDEX;  // 78話から開始
+    storyEndSelect.value = stories.length - 1;  // 最後のストーリー
+    
+    diaryEntries.appendChild(newEntry);
+    updateSkip77Option(newEntry);
+}
+
+function populateStoryOptions(select) {
+    select.innerHTML = '';
+    let chapterEpisodeCount = {};
+    stories.forEach((story, index) => {
+        if (!chapterEpisodeCount[story.chapter]) {
+            chapterEpisodeCount[story.chapter] = 1;
         }
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${story.chapter}章-${chapterEpisodeCount[story.chapter]}(${index + 1}話) ${story.title}`;
+        select.appendChild(option);
+        chapterEpisodeCount[story.chapter]++;
+    });
+    select.addEventListener('change', function() {
+        updateSkip77Option(this.closest('.diary-entry'));
+    });
+}
 
-        function calculatecdupEffect(level) {
-            return Math.min((level - 1), 5);
-        }
+function updateSkip77Option(diaryEntry) {
+    const storyStart = parseInt(diaryEntry.querySelector('.storyStart').value);
+    const storyEnd = parseInt(diaryEntry.querySelector('.storyEnd').value);
+    const skip77Option = diaryEntry.querySelector('.skip77Option');
+    
+    if (storyStart <= CHAPTER_77_INDEX && storyEnd >= CHAPTER_77_INDEX) {
+        skip77Option.classList.remove('hidden');
+    } else {
+        skip77Option.classList.add('hidden');
+    }
+}
 
-        function calculateSwiftTrajectoryEffect(level) {
-            if (level <= 5) {
-                return level;
-            } else {
-                return 5 + (level - 5) * 2;
-            }
-        }
+// 必要経験値計算関数
+function calculateExp() {
+    const x = parseInt(document.getElementById('currentLevel').value);
+    const currentExp = parseFloat(document.getElementById('currentExp').value);
+    let n;
 
-        // フリークリスタ計算関数
-        function calculateStock1() {
-            const n = parseFloat(document.getElementById('n1').value);
-            const m = parseInt(document.getElementById('m1').value);
-            const t = parseInt(document.getElementById('t1').value);
+    if (document.getElementById('levelIncreaseRadio').checked) {
+        n = parseInt(document.getElementById('levelIncrease').value);
+    } else {
+        const targetLevel = parseInt(document.getElementById('targetLevel').value);
+        n = targetLevel - x;
+    }
 
-            if (isNaN(n) || isNaN(m) || isNaN(t) || n <= 0 || m <= 0 || t < 0 || t >= m) {
-                document.getElementById('stockResult1').textContent = '正しい値を入力してください。';
-                return;
-            }
+    const currentLevelExp = Math.floor(Math.pow(x, 4) / 40) + 2 * x;
+    const currentExpValue = currentLevelExp * (1 - currentExp / 100);
 
-            const totalCost = n * m;
-            const j = totalCost / (m - t);
+    let total = currentExpValue;
+    for (let i = x + 1; i < x + n; i++) {
+        total += Math.floor(Math.pow(i, 4) / 40) + 2 * i;
+    }
 
-            document.getElementById('stockResult1').textContent = `${j.toFixed(1)}万円で売れば、${t}個がタダになります。`;
-        }
+    document.getElementById('resultRaw').textContent = `${x}レベル(${currentExp}%)から${x + n}レベルまでに必要な累計経験値は${Math.round(total)}です。`;
+    document.getElementById('resultFormatted').textContent = `${x}レベル(${currentExp}%)から${x + n}レベルまでに必要な累計経験値は${formatNumber(Math.round(total))}です。`;
+}
 
-        function calculateStock2() {
-            const n = parseFloat(document.getElementById('n2').value);
-            const m = parseInt(document.getElementById('m2').value);
-            const k = parseInt(document.getElementById('k2').value);
+// イベントリスナー
+document.getElementById('levelIncreaseRadio').addEventListener('change', function() {
+    document.getElementById('levelIncrease').disabled = false;
+    document.getElementById('targetLevel').disabled = true;
+});
 
-            if (isNaN(n) || isNaN(m) || isNaN(k) || n <= 0 || m <= 0 || k <= 0 || k > m) {
-                document.getElementById('stockResult2').textContent = '正しい値を入力してください。';
-                return;
-            }
+document.getElementById('targetLevelRadio').addEventListener('change', function() {
+    document.getElementById('levelIncrease').disabled = true;
+    document.getElementById('targetLevel').disabled = false;
+});
 
-            const totalCost = n * m;
-            const freeItems = m - k;
-            const r = totalCost / k;
+// 初期化
+function initializeDiaryEntry() {
+    const initialDiaryEntry = document.querySelector('.diary-entry');
+    initialDiaryEntry.querySelector('.currentLevel').value = 250;
+    initialDiaryEntry.querySelector('.currentExpPercentage').value = 0;
+    initialDiaryEntry.querySelector('.targetLevel').value = 290;
+    initialDiaryEntry.querySelector('.targetExpPercentage').value = 0;
+    
+    const storyStartSelect = initialDiaryEntry.querySelector('.storyStart');
+    const storyEndSelect = initialDiaryEntry.querySelector('.storyEnd');
+    
+    populateStoryOptions(storyStartSelect);
+    populateStoryOptions(storyEndSelect);
+    
+    storyStartSelect.value = CHAPTER_78_INDEX;  // 9章の78話
+    storyEndSelect.value = stories.length - 1;  // 最後のストーリー
+    
+    updateSkip77Option(initialDiaryEntry);
+}
 
-            document.getElementById('stockResult2').textContent = `${r.toFixed(1)}万円で売れば、残りの${freeItems}個がタダになります。`;
-        }
-
-        // c率計算関数
-        function calculateCrits() {
-            var crt = parseFloat(document.getElementById('crt').value) || 0;
-            var crp = parseFloat(document.getElementById('crp').value) || 0;
-            var addcr = parseFloat(document.getElementById('addcr').value) || 0;
-            var addcra = parseFloat(document.getElementById('addcra').value) || 0;
-            var addcrb = parseFloat(document.getElementById('addcrb').value) || 0;
-            var addcrc = parseFloat(document.getElementById('addcrc').value) || 0;
-            var addcrd = parseFloat(document.getElementById('addcrd').value) || 0;
-
-            var result = Math.floor((25 + crt / 3.4) * (1 + crp / 100)) + addcr + addcra + addcrb + addcrc + addcrd;
-            document.getElementById('critsResult').innerText = '結果: ' + result.toFixed(2);
-        }
-
-        // マケ計算機関数
-        function calculateDisplay() {
-            let s = parseFloat(document.getElementById('s').value);
-            let m = parseFloat(document.getElementById('m').value);
-            if (isNaN(s) || isNaN(m)) {
-                alert('有効な数値を入力してください。');
-                return;
-            }
-            let result = s * (1 + m/100);
-            document.getElementById('displayResult').textContent = `マケ表記値段: ${result.toFixed(2)}`;
-        }
-
-        function calculateSetting() {
-            let hyouki = parseFloat(document.getElementById('hyouki').value);
-            let tesuu = parseFloat(document.getElementById('tesuu').value);
-            if (isNaN(hyouki) || isNaN(tesuu)) {
-                alert('有効な数値を入力してください。');
-                return;
-            }
-            let result = hyouki / (1 + tesuu/100);
-            document.getElementById('settingResult').textContent = `設定値段: ${result.toFixed(2)}`;
-        }
-
-        // 初期表示
-        showPage('cdPage');
+// ページ読み込み時の初期化
+window.addEventListener('DOMContentLoaded', (event) => {
+    showPage('cdPage');
+    initializeDiaryEntry();
+});
     </script>
 </body>
 </html>
