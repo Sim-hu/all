@@ -18,6 +18,39 @@
             background-color: #333;
             color: #f0f0f0;
         }
+        .update-history {
+            background-color: #f8f8f8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .dark-mode .update-history {
+            background-color: #444;
+            border-left-color: #45a049;
+        }
+        .update-history h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .dark-mode .update-history h2 {
+            color: #f0f0f0;
+        }
+        .update-entry {
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .dark-mode .update-entry {
+            border-bottom-color: #555;
+        }
+        .update-date {
+            font-weight: bold;
+            color: #666;
+        }
+        .dark-mode .update-date {
+            color: #ccc;
+        }            
         h1, h2 {
             color: #333;
             text-align: center;
@@ -316,6 +349,15 @@
 <!-- 日記 -->
 <div id="diaryPage" class="page">
     <h1>冒険者の日記シミュレータ</h1>
+
+    <div class="update-history">
+            <h2>アップデート履歴</h2>
+            <div class="update-entry">
+                <span class="update-date">2024/11/22</span>
+                <div class="update-content">荒くれラーナの王子追加(117話)</div>
+            </div>
+    </div>
+
     <div id="diaryEntries">
         <div class="diary-entry">
             <h3>日記 1</h3>
