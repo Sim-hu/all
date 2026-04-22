@@ -119,7 +119,12 @@
   { chapter: 14, episode: 118, title: "変異コエヌビアの村", exp: 183900000},         
   { chapter: 14, episode: 119, title: "変異リグシーとの激闘", exp: 189000000},
   { chapter: 15, episode: 120, title: "方舟の危機", exp: 210500000},
-  { chapter: 15, episode: 121, title: "海岸の攻防", exp: 216300000}
+  { chapter: 15, episode: 121, title: "ウンダ救出作戦", exp: 222200000},
+  { chapter: 15, episode: 122, title: "ウンダの帰還", exp: 228100000},
+  { chapter: 15, episode: 123, title: "若者と老木", exp: 234000000},
+  { chapter: 15, episode: 124, title: "リグシーの集落", exp: 240000000},
+  { chapter: 15, episode: 125, title: "遠い日の幻影", exp: 246000000},
+  { chapter: 15, episode: 126, title: "そが源流は、色濃く果たして", exp: 252100000},                
 ];
 
 const CHAPTER_77_INDEX = 76;
