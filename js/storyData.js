@@ -125,7 +125,7 @@
   { chapter: 15, episode: 124, title: "若者と老木", exp: 234000000},
   { chapter: 15, episode: 125, title: "リグシーの集落", exp: 240000000},
   { chapter: 15, episode: 126, title: "遠い日の幻影", exp: 246000000},
-  { chapter: 15, episode: 127, title: "そが源流は、色濃く果たして", exp: 252100000},                
+  { chapter: 15, episode: 127, title: "そが源流は、色濃く果たして", exp: 252100000}           
 ];
 
 const CHAPTER_77_INDEX = 76;
